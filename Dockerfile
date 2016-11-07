@@ -19,7 +19,7 @@
 # Thanks to @hqmq_ for the heads up
 FROM phusion/baseimage:0.9.19
 MAINTAINER Brad Condo <brad.condo@profootballfocus.com>
-LABEL org.label-schema.vcs-url="https://github.com/bradcondo/docker-rails"
+LABEL org.label-schema.vcs-url="https://github.com/pro-football-focus/docker-rails"
 
 # Important!  Update this no-op ENV variable when this Dockerfile
 # is updated with the current date. It will force refresh of all
