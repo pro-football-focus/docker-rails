@@ -18,7 +18,7 @@
 #
 # Thanks to @hqmq_ for the heads up
 FROM phusion/baseimage:0.9.19
-MAINTAINER Brad Condo <brad.condo@profootballfocus.com>
+MAINTAINER Pro Football Focus <devops@profootballfocus.com>
 LABEL org.label-schema.vcs-url="https://github.com/pro-football-focus/docker-rails"
 
 # Important!  Update this no-op ENV variable when this Dockerfile
