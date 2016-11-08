@@ -67,6 +67,9 @@ RUN gem install bundler
 RUN gem install rails -v 4.2.4
 
 # Clean up from the install process
+RUN make clean
+RUN apt-get purge
+RUN apt-get autoremove
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add our app server daemon
