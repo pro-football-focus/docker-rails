@@ -54,23 +54,19 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 # Install Ruby 2.2.2
-WORKDIR /ruby
-RUN apt-get update
-RUN apt-get install -y git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev
-RUN curl -O http://ftp.ruby-lang.org/pub/ruby/2.2/ruby-2.2.2.tar.gz
-RUN tar -xzf ruby-2.2.2.tar.gz -C /ruby
 WORKDIR /ruby/ruby-2.2.2
-RUN ./configure
-RUN make
-RUN make install
-RUN gem install bundler
-RUN gem install rails -v 4.2.4
-
-# Clean up from the install process
-RUN make clean
-RUN apt-get purge
-RUN apt-get autoremove
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y iproute git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev && \
+    curl -O http://ftp.ruby-lang.org/pub/ruby/2.2/ruby-2.2.2.tar.gz && \
+    tar -xzf ruby-2.2.2.tar.gz -C /ruby && \
+    ./configure && \
+    make && \
+    make install && \
+    gem install bundler && \
+    gem install rails -v 4.2.4 && \
+    make clean && \
+    apt-get remove -y curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /ruby
 
 # Add our app server daemon
 RUN mkdir /etc/service/app
