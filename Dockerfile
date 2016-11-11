@@ -25,9 +25,9 @@ ENV LC_ALL en_US.UTF-8
 # Prepare to install packages
 WORKDIR /tmp
 
-# Install Ruby 2.2.2 + Rails 4.2.4
+# Install required packages (includes Ruby 2.2.2 + Rails 4.2.4)
 RUN apt-get update && \
-    apt-get install --no-install-recommends --no-install-suggests -y zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev && \
+    apt-get install --no-install-recommends -y iproute git curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev && \
     curl -O http://ftp.ruby-lang.org/pub/ruby/2.2/ruby-2.2.2.tar.gz && \
     tar -xzf ruby-2.2.2.tar.gz -C /tmp && \
     cd /tmp/ruby-2.2.2 && \
@@ -37,35 +37,10 @@ RUN apt-get update && \
     gem install bundler && \
     gem install rails -v 4.2.4 && \
     make clean && \
-    apt-get remove --purge --auto-remove -y zlib1g-dev build-essential libssl-dev libreadline-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev && \
+    apt-get remove --purge -y curl zlib1g-dev build-essential libssl-dev libreadline-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev && \
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# Install Passenger + Nginx
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7 && \
-    apt-get install -y apt-transport-https ca-certificates && \
-    echo "\ndeb https://oss-binaries.phusionpassenger.com/apt/passenger xenial main" >> /etc/apt/sources.list.d/passenger.list && \
-    apt-get update && \
-    apt-get install --no-install-recommends --no-install-suggests -y nginx-extras passenger && \
-    apt-get autoremove -y && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/bin/ruby* /usr/lib/ruby/2.3.0 && \
-    ln -s /usr/local/bin/ruby /usr/bin/ruby
-
-# Install dependencies
-RUN apt-get update && \
-    apt-get install --no-install-recommends --no-install-suggests -y nodejs git inotify-tools iproute libmysqlclient-dev libpq-dev && \
-    apt-get autoremove -y && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    ln -s /usr/bin/nodejs /usr/bin/node
-
-# Configure nginx
-COPY ./docker-passenger.conf /etc/nginx/passenger.conf
-COPY ./docker-nginx.conf /etc/nginx/nginx.conf
-RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
-    ln -sf /dev/stderr /var/log/nginx/error.log
 
 # Add our app server daemon
 RUN mkdir /etc/service/app
