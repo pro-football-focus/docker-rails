@@ -25,9 +25,9 @@ ENV LC_ALL en_US.UTF-8
 # Prepare to install packages
 WORKDIR /tmp
 
-# Install required packages (includes Ruby 2.2.2 + Rails 4.2.4)
+# Install Ruby 2.2.2 + Rails 4.2.4
 RUN apt-get update && \
-    apt-get install --no-install-recommends -y iproute git curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev && \
+    apt-get install --no-install-recommends --no-install-suggests -y zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev && \
     curl -O http://ftp.ruby-lang.org/pub/ruby/2.2/ruby-2.2.2.tar.gz && \
     tar -xzf ruby-2.2.2.tar.gz -C /tmp && \
     cd /tmp/ruby-2.2.2 && \
@@ -37,10 +37,18 @@ RUN apt-get update && \
     gem install bundler && \
     gem install rails -v 4.2.4 && \
     make clean && \
-    apt-get remove --purge -y curl zlib1g-dev build-essential libssl-dev libreadline-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev && \
+    apt-get remove --purge --auto-remove -y zlib1g-dev build-essential libssl-dev libreadline-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev && \
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Install dependencies
+RUN apt-get update && \
+    apt-get install --no-install-recommends --no-install-suggests -y nodejs git inotify-tools iproute libmysqlclient-dev libpq-dev && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    ln -s /usr/bin/nodejs /usr/bin/node
 
 # Add our app server daemon
 RUN mkdir /etc/service/app
