@@ -5,7 +5,7 @@
 echo "`/sbin/ip route|awk '/default/ { print  $3}'` dockerhost" >> /etc/hosts
 
 # Build assets if in production mode
-if [ $RAILS_ENV == "production" ]
+if [[ $RAILS_ENV == "production" ]]
 then
   cd /app; RAILS_ENV=production bundle exec rake assets:precompile
 fi
