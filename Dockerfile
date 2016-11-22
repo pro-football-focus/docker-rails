@@ -10,9 +10,6 @@ RUN echo /root > /etc/container_environment/HOME
 # Use the baseimage init system
 CMD ["/sbin/my_init"]
 
-# Create the volume we'll put our code into
-VOLUME /app
-
 # Make the required ports available
 EXPOSE 3000
 
@@ -55,11 +52,20 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC
 
 # Install dependencies
 RUN apt-get update && \
-    apt-get install --no-install-recommends --no-install-suggests -y nodejs git inotify-tools iproute libmysqlclient-dev libpq-dev && \
+    apt-get install --no-install-recommends --no-install-suggests -y git inotify-tools iproute libmysqlclient-dev libpq-dev && \
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     ln -s /usr/bin/nodejs /usr/bin/node
+
+# Install NodeJS v6
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
+    apt-get update && \
+    apt-get install --no-install-recommends --no-install-suggests -y nodejs && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 
 # Configure nginx
 COPY ./docker-passenger.conf /etc/nginx/passenger.conf
