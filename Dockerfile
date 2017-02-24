@@ -1,7 +1,6 @@
 FROM phusion/baseimage:0.9.19
-MAINTAINER Pro Football Focus <devops@profootballfocus.com>
 LABEL org.label-schema.vcs-url="https://github.com/pro-football-focus/docker-rails"
-ENV REFRESHED_AT 2016-11-16-2
+ENV REFRESHED_AT 2017-02-24
 
 # Setup the environment
 RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime
@@ -9,9 +8,6 @@ RUN echo /root > /etc/container_environment/HOME
 
 # Use the baseimage init system
 CMD ["/sbin/my_init"]
-
-# Make the required ports available
-EXPOSE 3000
 
 # Set the locale
 RUN locale-gen en_US.UTF-8
@@ -61,13 +57,6 @@ RUN apt-get update && \
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
     apt-get update && \
     apt-get install --no-install-recommends --no-install-suggests -y nodejs && \
-    apt-get autoremove -y && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# Install awscli
-RUN apt-get update && \
-    apt-get install --no-install-recommends --no-install-suggests -y awscli && \
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
