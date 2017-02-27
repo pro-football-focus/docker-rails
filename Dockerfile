@@ -18,17 +18,17 @@ ENV LC_ALL en_US.UTF-8
 # Prepare to install packages
 WORKDIR /tmp
 
-# Install Ruby 2.3.3 + Rails 5.0.0.1
+# Install Ruby 2.2.2 + Rails 4.2.7
 RUN apt-get update && \
     apt-get install --no-install-recommends --no-install-suggests -y zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev && \
-    curl -O http://ftp.ruby-lang.org/pub/ruby/2.3/ruby-2.3.3.tar.gz && \
-    tar -xzf ruby-2.3.3.tar.gz -C /tmp && \
-    cd /tmp/ruby-2.3.3 && \
+    curl -O http://ftp.ruby-lang.org/pub/ruby/2.2/ruby-2.2.2.tar.gz && \
+    tar -xzf ruby-2.2.2.tar.gz -C /tmp && \
+    cd /tmp/ruby-2.2.2 && \
     ./configure && \
     make && \
     make install && \
     gem install bundler && \
-    gem install rails -v 5.0.0.1 && \
+    gem install rails -v 4.2.7 && \
     make clean && \
     apt-get remove --purge --auto-remove -y zlib1g-dev build-essential libssl-dev libreadline-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev && \
     apt-get autoremove -y && \
@@ -61,7 +61,7 @@ RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Configure nginx
+# Configure nginx & Passenger
 COPY ./docker-passenger.conf /etc/nginx/passenger.conf
 COPY ./docker-nginx.conf /etc/nginx/nginx.conf
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
