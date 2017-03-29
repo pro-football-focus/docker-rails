@@ -1,4 +1,4 @@
-FROM alpine:3.3
+FROM alpine:3.4
 MAINTAINER Jake Weaver <jake.weaver@profootballfocus.com>
 
 ENV RAILS_ENV "production"
