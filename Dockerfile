@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM alpine:3.5
 MAINTAINER Jake Weaver <jake.weaver@profootballfocus.com>
 
 ENV RAILS_ENV "production"
@@ -7,7 +7,7 @@ ENV RACK_ENV "production"
 RUN apk --update --upgrade add \
     curl-dev ruby-dev build-base alpine-sdk coreutils postgresql-dev mysql-dev \
     zlib-dev libxml2-dev libxslt-dev tzdata yaml-dev libffi-dev \
-    ruby ruby-io-console ruby-json git yaml nodejs && \
+    ruby ruby-io-console ruby-json ruby-bigdecimal git yaml nodejs && \
     gem install -N bundler && \
     echo 'gem: --no-document' >> ~/.gemrc && \
     cp ~/.gemrc /etc/gemrc && \
