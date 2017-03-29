@@ -1,4 +1,4 @@
 #!/bin/bash
 cd ../
 VERSION=$(cat version)
-docker build -t profootballfocus/rails:$VERSION .
+docker build -t profootballfocus/ruby_run:$VERSION .
