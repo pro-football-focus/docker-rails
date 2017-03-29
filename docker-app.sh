@@ -9,5 +9,4 @@ else
 fi
 
 # Setup and start the rails application
-RAILS_ENV=production
 cd /app; bundle exec foreman start

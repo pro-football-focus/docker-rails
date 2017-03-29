@@ -16,6 +16,11 @@ RUN apk --update --upgrade add \
     find / -type f -iname \*.apk-new -delete && \
     rm -rf /var/cache/apk/*
 
+RUN apk -Uuv add groff less python python-dev py-pip && \
+    pip install awscli && \
+    apk --purge -v del py-pip && \
+    rm /var/cache/apk/*
+
 # Add our app server daemon
 RUN mkdir -p /etc/service/app
 ADD docker-app.sh /etc/service/app/run
