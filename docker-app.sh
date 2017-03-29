@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Export docker secrets with "ENV_" prefix into execution context
 for i in /run/secrets/ENV_*; do
@@ -6,5 +6,4 @@ for i in /run/secrets/ENV_*; do
 done
 
 # Setup and start the rails application
-cd /app; RAILS_ENV=$APP_ENV bundle exec rake db:migrate && \
-         nginx
+cd /app; bundle exec rake db:migrate && foreman start
