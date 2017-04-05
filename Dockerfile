@@ -29,6 +29,7 @@ RUN apk -Uuv add groff less python python-dev py-pip && \
 RUN mkdir -p /etc/service/app
 ADD docker-app.sh /etc/service/app/run
 RUN chmod +x /etc/service/app/run
+ENTRYPOINT /etc/service/app/run
 
 # Make sure we start up in the app directory
 WORKDIR /app
