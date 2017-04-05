@@ -11,7 +11,7 @@ ENV DISABLE_SSL "true"
 RUN apk --update --upgrade add \
     curl-dev ruby-dev build-base alpine-sdk coreutils postgresql-dev mysql-dev \
     zlib-dev libxml2-dev libxslt-dev tzdata yaml-dev libffi-dev \
-    ruby ruby-io-console ruby-bigdecimal ruby-json git yaml nodejs && \
+    ruby ruby-io-console ruby-json ruby-bigdecimal git yaml nodejs && \
     gem install -N bundler && \
     echo 'gem: --no-document' >> ~/.gemrc && \
     cp ~/.gemrc /etc/gemrc && \
@@ -29,6 +29,7 @@ RUN apk -Uuv add groff less python python-dev py-pip && \
 RUN mkdir -p /etc/service/app
 ADD docker-app.sh /etc/service/app/run
 RUN chmod +x /etc/service/app/run
+ENTRYPOINT /etc/service/app/run
 
 # Make sure we start up in the app directory
 WORKDIR /app
