@@ -8,22 +8,23 @@ ENV RACK_ENV "production"
 # set at build time: https://github.com/puma/puma/issues/1181
 ENV DISABLE_SSL "true"
 
-RUN apk --update --upgrade add \
+# Install ruby and dependencies
+RUN apk --update --upgrade --no-cache add \
     curl-dev ruby-dev build-base alpine-sdk coreutils postgresql-dev mysql-dev \
     zlib-dev libxml2-dev libxslt-dev tzdata yaml-dev libffi-dev \
     ruby ruby-io-console ruby-json ruby-bigdecimal git yaml nodejs && \
-    gem install -N bundler && \
+    find / -type f -iname \*.apk-new -delete
+
+# Install bundler and configure it
+RUN gem install -N bundler && \
     echo 'gem: --no-document' >> ~/.gemrc && \
     cp ~/.gemrc /etc/gemrc && \
     chmod uog+r /etc/gemrc && \
-    bundle config --global build.nokogiri  "--use-system-libraries" && \
-    find / -type f -iname \*.apk-new -delete && \
-    rm -rf /var/cache/apk/*
+    bundle config --global build.nokogiri  "--use-system-libraries"
 
-RUN apk -Uuv add groff less python python-dev py-pip && \
+RUN apk --update --upgrade --no-cache -v add groff less python python-dev py-pip && \
     pip install awscli && \
-    apk --purge -v del py-pip && \
-    rm /var/cache/apk/*
+    apk --purge -v del py-pip
 
 # Add our app server daemon
 RUN mkdir -p /etc/service/app
