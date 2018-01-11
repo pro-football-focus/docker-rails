@@ -1,5 +1,5 @@
-FROM alpine:3.6
-MAINTAINER Jake Weaver <jake.weaver@profootballfocus.com>
+FROM alpine:3.7
+MAINTAINER Geoff Lane <geoff.lane@profootballfocus.com>
 
 ENV RAILS_ENV "production"
 ENV RACK_ENV "production"
