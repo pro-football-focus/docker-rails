@@ -3,10 +3,6 @@ MAINTAINER Geoff Lane <geoff.lane@profootballfocus.com>
 
 ENV RAILS_ENV "production"
 ENV RACK_ENV "production"
-# With LibreSSL, on alpine:3.5, puma 3.7+ compiles but fails when trying to
-# call DH_set0_pqg. Note that it will compile and run fine if DISABLE_SSL is
-# set at build time: https://github.com/puma/puma/issues/1181
-ENV DISABLE_SSL "true"
 
 # Install ruby and dependencies
 RUN apk --update --upgrade --no-cache add \
