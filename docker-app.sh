@@ -9,4 +9,4 @@ else
 fi
 
 # Setup and start the rails application
-cd /app; bundle exec foreman start
+cd /app; ./bin/foreman s
