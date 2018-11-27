@@ -8,7 +8,7 @@ ENV RACK_ENV "production"
 RUN apk --update --upgrade --no-cache add \
     curl-dev ruby-dev build-base alpine-sdk coreutils postgresql-dev mysql-dev \
     zlib-dev libxml2-dev libxslt-dev tzdata yaml-dev libffi-dev \
-    ruby ruby-io-console ruby-json ruby-bigdecimal git yaml nodejs npm && \
+    ruby-full git yaml nodejs npm && \
     find / -type f -iname \*.apk-new -delete
 
 # Install bundler and configure it
