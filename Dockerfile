@@ -1,4 +1,4 @@
-FROM alpine:3.8
+FROM alpine:3.9
 MAINTAINER Geoff Lane <geoff.lane@profootballfocus.com>
 
 ENV RAILS_ENV "production"
