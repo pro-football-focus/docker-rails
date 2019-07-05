@@ -25,4 +25,7 @@ redis-server --daemonize yes
 
 rabbitmq-server -detached
 
+/usr/bin/mysqld_safe --datadir='/var/lib/mysql' &
+mysqladmin -u root password "${DB_ROOT_PASS}"
+
 exec "$@"
