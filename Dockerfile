@@ -1,4 +1,4 @@
-FROM alpine:3.9
+FROM alpine:3.10
 MAINTAINER Geoff Lane <geoff.lane@profootballfocus.com>
 
 ENV RAILS_ENV "production"
@@ -18,9 +18,8 @@ RUN gem install -N bundler && \
     chmod uog+r /etc/gemrc && \
     bundle config --global build.nokogiri  "--use-system-libraries"
 
-RUN apk --update --upgrade --no-cache -v add groff less python python-dev py-pip && \
-    pip install awscli && \
-    apk --purge -v del py-pip
+RUN apk --update --upgrade --no-cache -v add groff less python3 && \
+    pip3 install awscli
 
 # Add our app server daemon
 RUN mkdir -p /etc/service/app
