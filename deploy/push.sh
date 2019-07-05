@@ -5,3 +5,4 @@ cd $DIR/..
 VERSION=$(cat version)
 
 docker push profootballfocus/ruby_run:$VERSION
+docker push profootballfocus/ruby_ci:$VERSION
