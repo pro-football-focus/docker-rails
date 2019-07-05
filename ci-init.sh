@@ -25,4 +25,6 @@ redis-server --daemonize yes
 
 rabbitmq-server -detached
 
+gosu mysql mysqld_safe --datadir='/var/lib/mysql' &
+
 exec "$@"

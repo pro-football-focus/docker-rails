@@ -10,8 +10,8 @@ ENV PG_DATA="/var/lib/postgresql/data" \
     RABBITMQ_VERSION="3.7.7" \
     TZ="America/Los_Angeles"
 
-RUN apk add --update --no-cache python3 postgresql postgresql-contrib gnupg openssl openssh-client wget jq redis tar xz imagemagick bash \
-      erlang erlang-mnesia erlang-ssl erlang-sasl erlang-xmerl erlang-eldap erlang-os-mon
+
+RUN apk add --update --no-cache python3  gnupg openssl openssh-client wget jq redis tar xz imagemagick bash
 
 # alpine 3.10 should have gosu as a package
 # Install Gosu
@@ -24,6 +24,8 @@ RUN wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/downloa
     gosu nobody true
 
 # Install PostgreSQL
+RUN apk add --update --no-cache postgresql postgresql-contrib
+
 RUN mkdir -p "$PG_DATA" && chmod 0700 "$PG_DATA" && chown -R postgres "$PG_DATA" && \
     mkdir -p /run/postgresql && chmod g+s /run/postgresql && chown -R postgres /run/postgresql && \
     gosu postgres initdb -D $PG_DATA && \
@@ -31,12 +33,28 @@ RUN mkdir -p "$PG_DATA" && chmod 0700 "$PG_DATA" && chown -R postgres "$PG_DATA"
     gosu postgres psql --username $POSTGRES_USER -c "ALTER USER \"$POSTGRES_USER\" WITH SUPERUSER PASSWORD '$POSTGRES_PASSWORD'" && \
     gosu postgres pg_ctl -D "$PG_DATA" -m fast -w stop
 
+# Install mysql
+ENV DB_DATA_PATH="/var/lib/mysql" \
+    DB_USER="mysql" \
+    DB_ROOT_PASS="mysql" \
+    MAX_ALLOWED_PACKET="200M"
+
+RUN apk add --update --no-cache mariadb mariadb-client
+RUN mkdir -p "$DB_DATA_PATH" && chmod 0700 "$DB_DATA_PATH" && chown -R mysql "$DB_DATA_PATH" && \
+    mkdir -p /run/mysqld && chmod g+s /run/mysqld && chown -R mysql /run/mysqld && \
+    gosu mysql mysql_install_db --user=mysql --datadir=${DB_DATA_PATH} && \
+    gosu mysql mysqld --datadir=${DB_DATA_PATH} & \
+    sleep 5 && \
+    gosu mysql mysqladmin -u root password "${DB_ROOT_PASS}" shutdown
+
 # Install AWS CLI
 RUN \
     pip3 install awscli --upgrade --user && \
     mkdir -p $HOME/.ssh
 
 # Install RabbitMQ
+RUN apk add --update --no-cache erlang erlang-mnesia erlang-ssl erlang-sasl erlang-xmerl erlang-eldap erlang-os-mon
+
 RUN wget -O rabbitmq-server.tar.xz.asc "https://github.com/rabbitmq/rabbitmq-server/releases/download/v$RABBITMQ_VERSION/rabbitmq-server-generic-unix-${RABBITMQ_VERSION}.tar.xz.asc" && \
   wget -O rabbitmq-server.tar.xz     "https://github.com/rabbitmq/rabbitmq-server/releases/download/v$RABBITMQ_VERSION/rabbitmq-server-generic-unix-${RABBITMQ_VERSION}.tar.xz" && \
   export GNUPGHOME="$(mktemp -d)" && \
