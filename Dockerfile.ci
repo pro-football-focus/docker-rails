@@ -10,7 +10,7 @@ ENV PG_DATA="/var/lib/postgresql/data" \
     RABBITMQ_VERSION="3.7.7" \
     TZ="America/Los_Angeles"
 
-RUN apk add --update --no-cache python3 postgresql postgresql-contrib gnupg openssl wget jq redis tar xz imagemagick bash
+RUN apk add --update --no-cache python3 postgresql postgresql-contrib gnupg openssl openssh-client wget jq redis tar xz imagemagick bash
 
 # alpine 3.10 should have gosu as a package
 # Install Gosu
