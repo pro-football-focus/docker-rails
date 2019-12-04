@@ -1,6 +1,7 @@
 FROM alpine:3.10
 MAINTAINER Geoff Lane <geoff.lane@profootballfocus.com>
 
+ENV REFRESHED_AT=2019-12-04
 ENV RAILS_ENV "production"
 ENV RACK_ENV "production"
 
