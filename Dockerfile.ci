@@ -11,9 +11,9 @@ ENV PG_DATA="/var/lib/postgresql/data" \
     TZ="America/Los_Angeles"
 
 
-RUN apk add --update --no-cache python3  gnupg openssl openssh-client wget jq redis tar xz imagemagick bash
+RUN apk add --update --no-cache python3 py3-pip gnupg openssl openssh-client wget jq redis tar xz imagemagick bash
 
-# alpine 3.10 should have gosu as a package
+# alpine 3.14 should have gosu as a package
 # Install Gosu
 RUN wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64" && \
     wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64.asc" && \
@@ -45,15 +45,15 @@ RUN mkdir -p "$DB_DATA_PATH" && chmod 0700 "$DB_DATA_PATH" && chown -R mysql "$D
     gosu mysql mysql_install_db --user=mysql --datadir=${DB_DATA_PATH} && \
     gosu mysql mysqld --datadir=${DB_DATA_PATH} & \
     sleep 5 && \
-    gosu mysql mysqladmin -u root password "${DB_ROOT_PASS}" shutdown
+    mysqladmin -u root password "${DB_ROOT_PASS}" shutdown
 
 # Install AWS CLI
 RUN \
-    pip3 install awscli --upgrade --user && \
+    pip install awscli --upgrade --user && \
     mkdir -p $HOME/.ssh
 
 # Install RabbitMQ
-RUN apk add --update --no-cache erlang erlang-mnesia erlang-ssl erlang-sasl erlang-xmerl erlang-eldap erlang-os-mon
+RUN apk add --update --no-cache erlang
 
 RUN wget -O rabbitmq-server.tar.xz.asc "https://github.com/rabbitmq/rabbitmq-server/releases/download/v$RABBITMQ_VERSION/rabbitmq-server-generic-unix-${RABBITMQ_VERSION}.tar.xz.asc" && \
   wget -O rabbitmq-server.tar.xz     "https://github.com/rabbitmq/rabbitmq-server/releases/download/v$RABBITMQ_VERSION/rabbitmq-server-generic-unix-${RABBITMQ_VERSION}.tar.xz" && \

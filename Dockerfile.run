@@ -1,7 +1,7 @@
-FROM alpine:3.10
+FROM alpine:3.13
 MAINTAINER Geoff Lane <geoff.lane@profootballfocus.com>
 
-ENV REFRESHED_AT=2019-12-04
+ENV REFRESHED_AT=2021-03025
 ENV RAILS_ENV "production"
 ENV RACK_ENV "production"
 
@@ -19,8 +19,8 @@ RUN gem install -N bundler && \
     chmod uog+r /etc/gemrc && \
     bundle config --global build.nokogiri  "--use-system-libraries"
 
-RUN apk --update --upgrade --no-cache -v add groff less python3 && \
-    pip3 install awscli
+RUN apk --update --upgrade --no-cache -v add groff less python3 py3-pip && \
+    pip install awscli
 
 # Add our app server daemon
 RUN mkdir -p /etc/service/app
